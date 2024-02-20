@@ -1,0 +1,61 @@
+---
+- name: Add users
+  tags: adduser
+  user:
+   name: "{{ item.username }}"
+   password: "{{ item.password }}"
+   state: present
+  with_items: "{{ users_to_add }}"
+  register: user_creation_results
+
+- name: debug user creation
+  tags: adduser
+  debug:
+   msg: "User '{{ item.item.username }}' was {{ 'created' if item.changed else 'not created' }}"
+  with_items: "{{ user_creation_results.results }}"
+#==============================================================================================
+- name: Remove user
+  tags: removeuser
+  user:
+   name: "{{ item.username }}"
+   state: absent
+  with_items: "{{ users_to_remove }}"
+  register: deletion_result
+
+- name: debug user deletion
+  tags: removeuser
+  debug:
+   var: "User '{{ item.item.username }}' was {{ 'removed' if item.changed else 'not removed' }}"
+  with_items: "{{ deletion_result.results }}"
+
+#===============================================================================================
+- name: Add groups
+  tags: addgroups
+  group:
+    name: "{{ item.name }}"
+    state: present
+  with_items: "{{ groups_to_create }}"
+
+- name: remove groups
+  tags: removegroups
+  group:
+   name: "{{ item.name }}"
+   state: absent
+  with_items: "{{ groups_to_remove }}"
+
+#==========================================================================================
+- name: Add users to group
+  tags: adduserstogroup
+  user:
+   name: "{{ item.username }}"
+   groups: "{{ item.groups }}"
+   append: yes
+  with_items: "{{ user_to_groups }}"
+
+- name: Remove users from group
+  tags: removeusersfromgroup
+  user:
+   name: "{{ item.username }}"
+   groups: "{{ item.groups}}"
+   append: no
+  with_items: "{{ user_from_group }}"

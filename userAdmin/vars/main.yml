@@ -1,0 +1,33 @@
+---
+# vars file for userAdmin
+
+users_to_add:
+ - username: user_1
+   password: "{{ 'iamuser1' | password_hash('sha512') }}"
+ - username: user_2
+   password: "{{ 'iamuser2' | password_hash('sha512') }}"
+ - username: user_3
+   password: "{{ 'iamuser3' | password_hash('sha512') }}"
+
+users_to_remove:
+ - username: user_3
+
+groups_to_create:
+ - name: group1
+ - name: group2
+ - name: group3
+
+groups_to_remove:
+ - name: group3
+
+user_to_groups:
+ - username: user_1
+   groups: ["group1","group2","group3"]
+ - username: user_2
+   groups: ["group1","group2"]
+ - username: user_3
+   groups: ["group3"]
+
+user_from_group:
+ - username: user3
+   groups: []

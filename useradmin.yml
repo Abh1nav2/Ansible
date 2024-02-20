@@ -1,0 +1,7 @@
+---
+- name: user admin
+  hosts: clients
+  remote_user: _client
+  become: yes
+  roles:
+    - userAdmin
