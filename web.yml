@@ -1,0 +1,28 @@
+---
+- name: Create HTML page
+  hosts: localhost
+  tasks:
+    - name: Create HTML page on local machine
+      copy:
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Ansible webpage</title>
+          </head>
+          <body>
+            <h1><b>This is a HTML File, shared from the server.</b></h1>
+          </body>
+          </html>
+        dest: /home/_abhinav/web/index.html
+
+- name: Copy HTML page to the host
+  hosts: clients
+  remote_user: _client
+  become: true
+  tasks:
+    - name: Copy HTML page to the host
+      copy:
+        src: /home/_abhinav/web/index.html
+        dest: /var/www/html/index.html
+
